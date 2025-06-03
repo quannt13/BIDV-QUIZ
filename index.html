@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIDV Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+        .quiz-container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ccc; padding: 32px; }
+        .question { font-weight: bold; margin-bottom: 16px; }
+        .answers { list-style: none; padding: 0; }
+        .answers li { margin-bottom: 12px; }
+        .answers input[type="radio"] { margin-right: 8px; }
+        .actions { display: flex; justify-content: space-between; margin-top: 24px; }
+        .submit-btn { position: fixed; top: 24px; right: 24px; background: #007bff; color: #fff; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; display: none; }
+        .timer { font-size: 18px; font-weight: bold; color: #d9534f; margin-bottom: 16px; }
+        .result { margin-top: 32px; }
+        .correct { color: green; }
+        .wrong { color: red; }
+    </style>
+</head>
+<body>
+    <button class="submit-btn" id="submitBtn">Nộp bài</button>
+    <button class="submit-btn" id="resetBtn" style="top: 70px; display: none; background: #28a745;">Làm lại</button>
+    <div class="quiz-container">
+        <div class="timer" id="timer">20:00</div>
+        <div id="quiz"></div>
+        <div class="actions">
+            <button id="prevBtn" style="display:none;">Câu trước</button>
+            <button id="nextBtn">Câu tiếp theo</button>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        // Object lưu bộ câu hỏi
+        const questions = [
+            {
+                question: "Block Storage phù hợp với loại ứng dụng nào?",
+                answerA: "Lưu trữ dữ liệu sao lưu dài hạn.",
+                answerB: "Chạy cơ sở dữ liệu SQL hoặc NoSQL.",
+                answerC: "Lưu trữ hồ sơ pháp lý.",
+                answerD: "Phát trực tuyến đa phương tiện.",
+                correctAnswer: "B"
+            },
+            {
+                question: "Câu hỏi 2: HTML là gì?",
+                answerA: "Một ngôn ngữ lập trình.",
+                answerB: "Ngôn ngữ đánh dấu siêu văn bản.",
+                answerC: "Một loại cơ sở dữ liệu.",
+                answerD: "Ngôn ngữ truy vấn dữ liệu.",
+                correctAnswer: "B"
+            },
+            {
+                question: "Câu hỏi 3: CSS được sử dụng để làm gì?",
+                answerA: "Lập trình logic cho trang web.",
+                answerB: "Thiết kế và định dạng giao diện trang web.",
+                answerC: "Quản lý cơ sở dữ liệu.",
+                answerD: "Tạo hiệu ứng động cho trang web.",
+                correctAnswer: "B"
+            },
+            {
+                question: "Câu hỏi 4: JavaScript là gì?",
+                answerA: "Một loại cơ sở dữ liệu.",
+                answerB: "Ngôn ngữ lập trình phía máy chủ.",
+                answerC: "Ngôn ngữ lập trình kịch bản phía khách hàng.",
+                answerD: "Ngôn ngữ đánh dấu siêu văn bản.",
+                correctAnswer: "C"
+            },
+            {
+                question: "Câu hỏi 5: PHP thường được sử dụng cho mục đích gì?",
+                answerA: "Tạo các trang web tĩnh.",
+                answerB: "Lập trình ứng dụng di động.",
+                answerC: "Phát triển web phía máy chủ.",
+                answerD: "Thiết kế đồ họa cho web.",
+                correctAnswer: "C"
+            },
+            {
+                question: "Câu hỏi 6: SQL là gì?",
+                answerA: "Một ngôn ngữ lập trình web.",
+                answerB: "Ngôn ngữ truy vấn cấu trúc dùng để quản lý cơ sở dữ liệu.",
+                answerC: "Một loại hệ quản trị cơ sở dữ liệu.",
+                answerD: "Ngôn ngữ đánh dấu siêu văn bản.",
+                correctAnswer: "B"
+            },
+            {
+                question: "Câu hỏi 7: Bootstrap là gì?",
+                answerA: "Một ngôn ngữ lập trình.",
+                answerB: "Framework phát triển giao diện người dùng.",
+                answerC: "Công cụ quản lý cơ sở dữ liệu.",
+                answerD: "Ngôn ngữ truy vấn dữ liệu.",
+                correctAnswer: "B"
+            },
+            {
+                question: "Câu hỏi 8: API là gì?",
+                answerA: "Một loại cơ sở dữ liệu.",
+                answerB: "Giao diện lập trình ứng dụng.",
+                answerC: "Ngôn ngữ lập trình kịch bản.",
+                answerD: "Framework phát triển web.",
+                correctAnswer: "B"
+            },
+            {
+                question: "Câu hỏi 9: AJAX được sử dụng để làm gì?",
+                answerA: "Tải dữ liệu bất đồng bộ trong phát triển web.",
+                answerB: "Lập trình ứng dụng di động.",
+                answerC: "Quản lý cơ sở dữ liệu.",
+                answerD: "Thiết kế giao diện người dùng.",
+                correctAnswer: "A"
+            },
+            {
+                question: "Câu hỏi 10: React là gì?",
+                answerA: "Một thư viện JavaScript để xây dựng giao diện người dùng.",
+                answerB: "Ngôn ngữ lập trình phía máy chủ.",
+                answerC: "Công cụ quản lý cơ sở dữ liệu.",
+                answerD: "Ngôn ngữ đánh dấu siêu văn bản.",
+                correctAnswer: "A"
+            }
+        ];
+
+        // Random vị trí câu hỏi và đáp án
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Khởi tạo quiz
+        let quizData = JSON.parse(JSON.stringify(questions));
+        shuffle(quizData);
+        quizData = quizData.map(q => {
+            const answers = [
+                { key: 'A', text: q.answerA },
+                { key: 'B', text: q.answerB },
+                { key: 'C', text: q.answerC },
+                { key: 'D', text: q.answerD }
+            ];
+            shuffle(answers);
+            return { ...q, answers };
+        });
+
+        let current = 0;
+        let userAnswers = Array(quizData.length).fill(null);
+        let timer = 20 * 60; // 20 phút
+        let isSubmitted = false;
+
+        function renderQuestion(idx) {
+            const q = quizData[idx];
+            let html = `<div class="question">Câu ${idx + 1}: ${q.question}</div><ul class="answers">`;
+            q.answers.forEach((ans, i) => {
+                const checked = userAnswers[idx] === ans.key ? 'checked' : '';
+                let answerClass = '';
+                if (isSubmitted) {
+                    if (ans.key === q.correctAnswer) answerClass = 'correct';
+                    else if (ans.key === userAnswers[idx]) answerClass = 'wrong';
+                }
+                html += `<li>
+                    <label>
+                        <input type="radio" name="answer" value="${ans.key}" ${checked} ${isSubmitted ? 'disabled' : ''}>
+                        <span class="${answerClass}">${ans.text}</span>
+                    </label>
+                </li>`;
+            });
+            html += '</ul>';
+
+            // Hiển thị đáp án đúng/sai sau khi nộp bài
+            if (isSubmitted) {
+                const userAnsObj = q.answers.find(a => a.key === userAnswers[idx]);
+                const correctObj = q.answers.find(a => a.key === q.correctAnswer) || { text: q['answer' + q.correctAnswer] };
+                // html += `<div>
+                //     Đáp án của bạn: <span class="${userAnswers[idx] === q.correctAnswer ? 'correct' : 'wrong'}">${userAnsObj ? userAnsObj.text : 'Chưa chọn'}</span>
+                // </div>
+                // <div>
+                //     Đáp án đúng: <span class="correct">${correctObj.text}</span>
+                // </div>`;
+            }
+
+            document.getElementById('quiz').innerHTML = html;
+            document.getElementById('prevBtn').style.display = idx > 0 ? 'inline-block' : 'none';
+            document.getElementById('nextBtn').textContent = idx === quizData.length - 1 ? (isSubmitted ? 'Kết thúc' : 'Kết thúc') : 'Câu tiếp theo';
+            document.getElementById('submitBtn').style.display = (!isSubmitted && userAnswers.every(a => a !== null)) ? 'block' : 'none';
+            document.querySelector('.actions').style.display = 'flex';
+        }
+
+        // Lưu đáp án khi chọn
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'answer') {
+                userAnswers[current] = e.target.value;
+                document.getElementById('submitBtn').style.display = userAnswers.every(a => a !== null) ? 'block' : 'none';
+            }
+        });
+
+        // Next/Prev
+        document.getElementById('nextBtn').onclick = function() {
+            if (!isSubmitted && userAnswers[current] === null) {
+                alert('Vui lòng chọn đáp án!');
+                return;
+            }
+            if (current < quizData.length - 1) {
+                current++;
+                renderQuestion(current);
+            } else if (!isSubmitted) {
+                submitQuiz();
+            }
+        };
+        document.getElementById('prevBtn').onclick = function() {
+            if (current > 0) {
+                current--;
+                renderQuestion(current);
+            }
+        };
+
+        // Nộp bài
+        document.getElementById('submitBtn').onclick = submitQuiz;
+
+        document.getElementById('resetBtn').onclick = function() {
+            // Reset lại quiz
+            quizData = JSON.parse(JSON.stringify(questions));
+            shuffle(quizData);
+            quizData = quizData.map(q => {
+                const answers = [
+                    { key: 'A', text: q.answerA },
+                    { key: 'B', text: q.answerB },
+                    { key: 'C', text: q.answerC },
+                    { key: 'D', text: q.answerD }
+                ];
+                shuffle(answers);
+                return { ...q, answers };
+            });
+            current = 0;
+            userAnswers = Array(quizData.length).fill(null);
+            timer = 20 * 60;
+            isSubmitted = false;
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'none';
+            document.querySelector('.actions').style.display = 'flex';
+            renderQuestion(current);
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+        };
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            isSubmitted = true;
+            renderQuestion(current);
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'block'; // Hiện nút Làm lại
+        }
+
+        // Timer
+        function updateTimer() {
+            const min = Math.floor(timer / 60);
+            const sec = timer % 60;
+            document.getElementById('timer').textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+            if (timer === 0) submitQuiz();
+            timer--;
+        }
+        let timerInterval = setInterval(updateTimer, 1000);
+
+        // Khởi tạo
+        renderQuestion(current);
+        updateTimer();
+    </script>
+</body>
+</html>
