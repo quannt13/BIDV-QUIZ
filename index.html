@@ -370,39 +370,7 @@
         timerInterval = setInterval(updateTimer, 1000);
         updateTimer();
       };
-
-      // ==== Khởi tạo quiz ban đầu ====
-      function initQuiz() {
-        let count = $("#questionCount").value;
-        let allQuestions = JSON.parse(JSON.stringify(window.questions));
-        if (count !== "all") {
-          count = parseInt(count, 10);
-          shuffle(allQuestions);
-          quizData = allQuestions.slice(0, count);
-        } else {
-          quizData = allQuestions;
-          shuffle(quizData);
-        }
-        quizData = quizData.map((q) => {
-          const answers = [
-            { key: "A", text: q.answerA },
-            { key: "B", text: q.answerB },
-            { key: "C", text: q.answerC },
-            { key: "D", text: q.answerD },
-            { key: "E", text: q.answerE },
-          ];
-          // shuffle(answers);
-          return { ...q, answers };
-        });
-        userAnswers = Array(quizData.length).fill(null);
-        timer = 20 * 60;
-        resetQuizState();
-        renderQuestion(current);
-        clearInterval(timerInterval);
-        timerInterval = setInterval(updateTimer, 1000);
-        updateTimer();
-      }
-
+      
       // ==== Sự kiện chọn số câu hỏi ====
       $("#questionCount").addEventListener("change", function () {
         initQuiz();
