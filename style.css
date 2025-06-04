@@ -13,7 +13,7 @@
  }
 
  .quiz-header .timer {
-    padding-top: 12px;
+     padding-top: 12px;
      margin-right: auto;
  }
 
@@ -58,6 +58,13 @@
      border-radius: 4px;
      cursor: pointer;
      display: none;
+ }
+
+ .infor-button {
+     display: flex;
+     margin-bottom: 5px;
+     justify-content: flex-end;
+     align-items: anchor-center;
  }
 
  .timer {
