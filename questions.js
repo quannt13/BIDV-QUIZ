@@ -611,15 +611,6 @@
         "answerD": "Lớp API riêng biệt"
     },
     {
-        "question": "Câu hỏi",
-        "correctAnswer": "Đ.án đúng",
-        "answerA": "Phương án A",
-        "answerB": "Phương án B",
-        "answerC": "Phương án C",
-        "answerD": "Phương án D",
-        "answerE": "Phương án E"
-    },
-    {
         "question": "Firewall trong Public Cloud thường được gọi là gì?",
         "correctAnswer": "A",
         "answerA": "Security Group",
@@ -858,15 +849,6 @@
         "answerB": "Mở rộng cơ sở dữ liệu  ",
         "answerC": "Tối ưu hóa mã nguồn ứng dụng  ",
         "answerD": "Lưu trữ tạm thời dữ liệu"
-    },
-    {
-        "question": "Câu hỏi",
-        "correctAnswer": "Đ.án đúng",
-        "answerA": "Phương án A",
-        "answerB": "Phương án B",
-        "answerC": "Phương án C",
-        "answerD": "Phương án D",
-        "answerE": "Phương án E"
     },
     {
         "question": "Quyền truy cập hệ thống BIDV-MIS được phân chia theo các cấp độ nào?",
@@ -1267,14 +1249,6 @@
         "answerB": "Dữ liệu Datamart được di chuyển xuống Hadoop trước khi dọn dẹp/xoá để lưu trữ và phục vụ khai thác Dữ liệu lịch sử",
         "answerC": "Cả A và B",
         "answerD": "Thời gian lưu trữ dữ liệu trực tuyến tất cả các vùng tối thiểu 10 năm gần nhất "
-    },
-    {
-        "question": "Câu hỏi",
-        "correctAnswer": "Đáp án đúng",
-        "answerA": "Đáp án A",
-        "answerB": "Đáp án B",
-        "answerC": "Đáp án C",
-        "answerD": "Đáp án D"
     },
     {
         "question": "Quy định này được áp dụng cho đơn vị nào trong BIDV?",
@@ -1755,15 +1729,6 @@
         "answerB": "Thông báo Ban Kiểm tra Giám sát",
         "answerC": "Trình Hội đồng Kiến trúc thông qua Ban Công nghệ",
         "answerD": "Lùi tiến độ dự án"
-    },
-    {
-        "question": "Câu hỏi",
-        "correctAnswer": "Đ.án đúng",
-        "answerA": "Phương án A",
-        "answerB": "Phương án B",
-        "answerC": "Phương án C",
-        "answerD": "Phương án D",
-        "answerE": "Phương án E"
     },
     {
         "question": "Số manday tối đa của 1 bảo trì phần mềm",
